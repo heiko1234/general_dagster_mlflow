@@ -1,0 +1,12 @@
+
+
+blobcontainer: "coinbasedata"
+
+subblobcontainer: "datadownload"
+
+filename: "rawdata.parquet"
+
+pipeline_name: "mlflow_pipeline_name"
+
+
+
