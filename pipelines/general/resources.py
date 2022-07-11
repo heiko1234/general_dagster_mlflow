@@ -5,7 +5,7 @@ import io
 from pathlib import Path
 
 import pandas as pd
-
+import yaml
 
 from azure.storage.blob import BlobServiceClient
 from azure.storage.blob import ContainerClient
@@ -146,6 +146,23 @@ def read_parquet_file(
     pq_file = io.BytesIO(bytes)
     df = pd.read_parquet(pq_file)
     return df
+
+
+def read_yaml_file(
+    container_name="azuriteblob", blob="targetfolder", file=".parquet"
+):
+
+    blob_str = blob + "/" + file
+    bytes = (
+        BlobStorageConnector(container_name=container_name)
+        .get_container_client()
+        .get_blob_client(blob=blob_str)
+        .download_blob()
+        .readall()
+    )
+    file = io.BytesIO(bytes)
+    configuration = yaml.full_load(file)
+    return configuration
 
 
 def read_csv_file(container_name="azuriteblob", blob="targetfolder", file=".csv"):
