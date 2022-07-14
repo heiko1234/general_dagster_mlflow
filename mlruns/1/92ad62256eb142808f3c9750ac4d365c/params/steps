@@ -1,0 +1,1 @@
+[('scaler', StandardScaler()), ('model', Ridge(alpha=0.6))]

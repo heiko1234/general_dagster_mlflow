@@ -1,0 +1,4 @@
+artifact_location: file:///home/heiko/Repos/dagster/general_dagster_mlflow/mlruns/1
+experiment_id: '1'
+lifecycle_stage: active
+name: Polymer_model

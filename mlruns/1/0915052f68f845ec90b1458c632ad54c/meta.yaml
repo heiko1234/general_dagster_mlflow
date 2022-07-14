@@ -1,0 +1,15 @@
+artifact_uri: file:///home/heiko/Repos/dagster/general_dagster_mlflow/mlruns/1/0915052f68f845ec90b1458c632ad54c/artifacts
+end_time: 1657826500883
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 0915052f68f845ec90b1458c632ad54c
+run_uuid: 0915052f68f845ec90b1458c632ad54c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1657826499670
+status: 3
+tags: []
+user_id: heiko

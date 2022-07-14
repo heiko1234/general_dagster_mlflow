@@ -1,0 +1,1 @@
+[('scaler', MinMaxScaler()), ('model', Ridge(alpha=0.6))]

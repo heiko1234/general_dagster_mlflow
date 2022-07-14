@@ -9,20 +9,27 @@ from pipelines.general.resources import (
     read_parquet_file,
     read_yaml_file
 )
-
+from pipelines.general.utility import (
+    read_configuration
+)
+from pipelines.general.mlflow_functions import (
+    mlflow_training
+)
 
 @op
-def check_data_quality(data: pd.DataFrame):
+def check_data_quality(context, data: pd.DataFrame):
     """Any data quality check
 
     Args:
         data (pd.DataFrame): a pandas DataFrame
     """
 
-    return True
+    context.log.info(f"data: {data.head}")
+
+    return False
 
 
-@op
+@op(ins={"containername": In(dagster_type=str), "subcontainername": In(dagster_type=str), "filename": In(dagster_type=str)})
 def load_blobdata(context, containername, subcontainername, filename):
 
     context.log.info(f"containername: {containername}")
@@ -44,7 +51,7 @@ def load_blobdata(context, containername, subcontainername, filename):
 
 
 
-@op
+@op(ins={"containername": In(dagster_type=str), "subcontainername": In(dagster_type=str), "filename": In(dagster_type=str)})
 def load_blobyaml(context, containername, subcontainername, filename):
 
     context.log.info(f"containername: {containername}")
@@ -66,7 +73,12 @@ def load_blobyaml(context, containername, subcontainername, filename):
 @op
 def filtered_data(context, dataframe, configuration):
 
+    context.log.info(f"dataframe: {dataframe.head}")
+    context.log.info(f"filter config: {configuration}")
+
     output_df = dataframe
+
+    context.log.info(f"output_df: {output_df.head}")
 
     return output_df
 
@@ -74,7 +86,7 @@ def filtered_data(context, dataframe, configuration):
 @op
 def mlflow_training_run(context, dataframe, configuration):
     
-    print("Not yet done :) ")
+    mlflow_training(data=dataframe, configuration=configuration)
 
 
 

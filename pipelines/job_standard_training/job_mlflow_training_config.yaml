@@ -1,12 +1,95 @@
 
 
-blobcontainer: "coinbasedata"
+# blobcontainer: "coinbasedata"
 
-subblobcontainer: "datadownload"
+# subblobcontainer: "datadownload"
 
-filename: "rawdata.parquet"
+# filename: "rawdata.parquet"
+
+
+blobcontainer: "sklearn"
+
+subblobcontainer: "data"
+
+filename: "ChemicalManufacturingProcess.parquet"
 
 pipeline_name: "mlflow_pipeline_name"
+
+
+
+target: "Yield"
+
+features:
+  - "ManufacturingProcess09"
+  - "ManufacturingProcess32"
+  - "ManufacturingProcess13"
+  - "BiologicalMaterial02"
+  - "ManufacturingProcess20"
+  - "ManufacturingProcess22"
+
+
+
+
+MLFlow_Experiment: "Polymer_model"
+
+
+test_split:
+  test_size: 0.1
+  random_state: 2021
+
+Model:
+  - "Lin_Reg"
+  - "Ridge":
+      "alpha": 0.6
+  - "RandomForestRegressor":
+      "n_estimators": 150
+      "max_features": 2
+      "bootstrap":  True
+  - "DecisionTreeRegressor":
+      "max_depth": 10
+      # "min_sample_split": 10
+      "min_samples_leaf": 6
+
+
+
+
+# EnsembledModel:
+#   - AdaboostRegression:
+#     - "AdaBoostRegressor":
+#       - n_estimators: 200
+#       - learning_rate: 0.05
+#     - "DecisionTreeRegressor":
+#       - max_leaf_nodes: 200
+#       - min_samples_split: 2
+
+# Ridge:
+#   - "alpha": 0.6
+
+# RandomForestRegressor:
+#   - "n_estimators": 150
+#   - "max_features": 2
+#   - "bootstrap":  True
+
+
+# DecisionTreeRegressor:
+#   - "max_depth": 10
+#   #- "min_sample_split": 10
+#   - "min_samples_leaf": 6
+
+
+# EnsembledModel_Parameter:
+#   - AdaboostRegression:
+#     - AdaBoostRegressor: 
+#       - n_estimators: 200
+#       - learning_rate: 0.05
+#     - DecisionTreeRegressor:
+#       - max_leaf_nodes: 200
+#       - min_samples_split: 2
+
+Scaler:
+  - "None"
+  - "MinMax"
+  - "Standard"
 
 
 
