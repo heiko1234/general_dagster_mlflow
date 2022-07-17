@@ -1,0 +1,13 @@
+
+
+blobcontainer: "sklearn"
+
+subblobcontainer_data: "data"
+filename_data: "ChemicalManufacturingProcess.parquet"
+
+subblobcontainer_config: "configuration_data"
+filename_config: "job_mlflow_training_config.yaml"
+
+pipeline_name: "mlflow_pipeline_name"
+
+

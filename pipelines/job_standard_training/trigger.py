@@ -27,11 +27,11 @@ def scheduler_dagster_mlflow_training(context: ScheduleEvaluationContext):
 
     local_run = os.getenv("LOCAL_RUN", False)
     if local_run:
-        general_configuration = read_configuration("./pipelines/job_standard_training/job_mlflow_training_config.yaml")
+        general_configuration = read_configuration("./pipelines/job_standard_training/config_loads.yaml")
 
     else:
         general_configuration = read_yaml_file(
-            container_name="coinbasedata", blob="configuration_data", file="job_mlflow_training_config.yaml"
+            container_name="coinbasedata", blob="configuration_data", file="config_loads.yaml"
         )
     output = {
         "ops":
