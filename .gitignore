@@ -9,7 +9,7 @@ __pycache__/
 
 # local folder
 .dagster/
-# data/
+data/
 mlflow/
 
 
