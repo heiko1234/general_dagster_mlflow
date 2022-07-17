@@ -3,6 +3,7 @@ name = "general_dagster_mlflow"
 version = "0.1.0"
 description = ""
 authors = ["Heiko Kulinna <Heikokulinna@gmx.de>"]
+packages = [{include = "pipelines"}]
 
 
 # to update only poetry lock file
