@@ -113,6 +113,16 @@ Within the pipelines folder:
 In the Ops.py file some basic functions are created, like loading data and the yaml file. 
 Here also filtering, or quality checks can be added.
 
+Here is a small list of functions that we can find within the ops.py:
+
+- check_data_quality
+- load_blobdata
+- load_blobyaml
+- filtered_data
+- mlflow_training_run
+
+
+
 ### Graph.py
 
 Within the graph we arrange the ops  
