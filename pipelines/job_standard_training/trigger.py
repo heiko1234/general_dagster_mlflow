@@ -20,19 +20,16 @@ from pipelines.general.resources import (
 
 @schedule(
     job=job_train_mlflow_models,
-    cron_schedule="*/2 * * * *", #every 2 min
+    cron_schedule="*/1 * * * *", #every 1 min
     pipeline_name="dagster_pipeline"
 )
 def scheduler_dagster_mlflow_training(context: ScheduleEvaluationContext):
 
-    local_run = os.getenv("LOCAL_RUN", False)
-    if local_run:
-        general_configuration = read_configuration("./pipelines/job_standard_training/config_loads.yaml")
+    # local_run = os.getenv("LOCAL_RUN", False)
+    # if local_run:
+    general_configuration = read_configuration("./pipelines/job_standard_training/config_loads.yaml")
 
-    else:
-        general_configuration = read_yaml_file(
-            container_name="coinbasedata", blob="configuration_data", file="config_loads.yaml"
-        )
+
     output = {
         "ops":
             {
@@ -66,13 +63,8 @@ def scheduler_dagster_mlflow_training(context: ScheduleEvaluationContext):
 def sensor_train_mlflow_model_training(context):
 
     local_run = os.getenv("LOCAL_RUN", False)
-    if local_run:
-        general_configuration = read_configuration("./pipelines/job_standard_training/job_mlflow_training_config.yaml")
-
-    else:
-        general_configuration = read_yaml_file(
-            container_name="sklearn", blob="configuration_data", file="job_mlflow_training_config.yaml"
-        )
+    # if local_run:
+    general_configuration = read_configuration("./pipelines/job_standard_training/config_loads.yaml")
     
     DataFetcher = BlobStorageConnector(container_name=general_configuration["blobcontainer"])
 
@@ -82,12 +74,17 @@ def sensor_train_mlflow_model_training(context):
     )
 
     data_length = data_file.shape[0]
+    # data_length
 
     last_length = int(context.cursor) if context.cursor else 0
 
     if data_length == last_length:
 
-        context.updata_cursor(str(data_length))
+        yield SkipReason(skip_message="no data update")
+
+    if data_length != last_length:
+
+        context.update_cursor(str(data_length))
 
         yield RunRequest(
             run_key=f"updated_datashape_{data_length}",

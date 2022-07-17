@@ -24,6 +24,8 @@ def check_data_quality(context, data: pd.DataFrame):
         data (pd.DataFrame): a pandas DataFrame
     """
 
+    # https://pandera.readthedocs.io/en/stable/
+
     context.log.info(f"data: {data.head}")
 
     return False
@@ -47,6 +49,7 @@ def load_blobdata(context, containername, subcontainername, filename):
         blob=subcontainername, 
         file=filename
     )
+    context.log.info(f"data: {df.head()}")
     return df
 
 
@@ -65,6 +68,8 @@ def load_blobyaml(context, containername, subcontainername, filename):
     context.log.info(f"file_type: {file_type}")
 
     configuration = read_yaml_file(container_name=containername, blob=subcontainername, file=filename)
+
+    context.log.info(f"configuration: {configuration}")
     return configuration
 
 

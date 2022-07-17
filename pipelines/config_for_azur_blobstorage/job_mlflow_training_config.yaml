@@ -1,15 +1,17 @@
 
 
-blobcontainer: "sklearn"
+# blobcontainer: "sklearn"
 
-subblobcontainer_data: "data"
-filename_data: "ChemicalManufacturingProcess.parquet"
+# subblobcontainer_data: "data"
+# filename_data: "ChemicalManufacturingProcess.parquet"
 
-subblobcontainer_config: "configuration_data"
-filename_config: "job_mlflow_training_config.yaml"
+# subblobcontainer_config: "configuration_data"
+# filename_config: "job_mlflow_training_config.yaml"
 
-pipeline_name: "mlflow_pipeline_name"
+# pipeline_name: "mlflow_pipeline_name"
 
+
+MLFlow_Experiment: "Manufacturing_model"
 
 
 target: "Yield"
@@ -21,11 +23,6 @@ features:
   - "BiologicalMaterial02"
   - "ManufacturingProcess20"
   - "ManufacturingProcess22"
-
-
-
-
-MLFlow_Experiment: "Manufacturing_model"
 
 
 test_split:
@@ -57,19 +54,7 @@ Model:
 #       - max_leaf_nodes: 200
 #       - min_samples_split: 2
 
-# Ridge:
-#   - "alpha": 0.6
 
-# RandomForestRegressor:
-#   - "n_estimators": 150
-#   - "max_features": 2
-#   - "bootstrap":  True
-
-
-# DecisionTreeRegressor:
-#   - "max_depth": 10
-#   #- "min_sample_split": 10
-#   - "min_samples_leaf": 6
 
 
 # EnsembledModel_Parameter:
