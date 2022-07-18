@@ -242,12 +242,12 @@ def convert_list_to_dict(list_of_dicts):
 
 
 
-# configuration = read_configuration(configuration_file_path="/home/heiko/Repos/dagster/general_dagster_mlflow/pipelines/job_standard_training/job_mlflow_training_config.yaml")
+# configuration = read_configuration(configuration_file_path="./config_for_azure_blobstorage/job_mlflow_training_config.yaml")
 
 # data = read_parquet_file(
-#     container_name=configuration["blobcontainer"], 
-#     blob=configuration["subblobcontainer"], 
-#     file=configuration["filename"]
+#     container_name="sklearn", 
+#     blob="data", 
+#     file="ChemicalManufacturingProcess.parquet"
 # )
 # data
 # configuration
@@ -383,89 +383,95 @@ def mlflow_training(data, configuration):
 
 
 
-    # for model in keys_in_list_of_dicts(list_of_dicts = configuration["EnsembledModel"]):
+    for model in keys_in_list_of_dicts(list_of_dicts = configuration["EnsembledModel"]):
 
-    #     for model_count, model_name in enumerate(configuration["EnsembledModel"]):
+        for model_count, model_name in enumerate(configuration["EnsembledModel"]):
 
-    #         model_name = list(model_name.keys())[0]
+            model_name = list(model_name.keys())[0]
 
-    #         # print(configuration["EnsembledModel"][model_count])
-    #         # print(model_name)
+            # TODO: even with dict, model pipeline is over 250 characters....
 
-    #         # print(configuration["EnsembledModel"][0]["AdaboostRegression"][0])
+            # model_name = list(configuration["EnsembledModel"][0].keys())[0]
+            # model_name
+            # model_count = 0
 
-    #         # print(list(configuration["EnsembledModel"][0]["AdaboostRegression"][1].keys())[0])
+            # print(configuration["EnsembledModel"][model_count])
+            # print(model_name)
 
-    #         key_model0=list(configuration["EnsembledModel"][model_count][model_name][0].keys())[0]
-    #         key_model1=list(configuration["EnsembledModel"][model_count][model_name][1].keys())[0]
+            # print(configuration["EnsembledModel"][0]["AdaboostRegression"][0])
 
-    #         # print(key_model0)
-    #         # print(key_model1)
-    #         # print(configuration["EnsembledModel"][model_count][model_name][0][key_model0])
-    #         # print(configuration["EnsembledModel"][model_count][model_name][1][key_model1])
+            # print(list(configuration["EnsembledModel"][0]["AdaboostRegression"][1].keys())[0])
 
-    #         # print(configuration["EnsembledModel"][0]["AdaboostRegression"][0][key_model1])
+            key_model0=list(configuration["EnsembledModel"][model_count][model_name][0].keys())[0]
+            key_model1=list(configuration["EnsembledModel"][model_count][model_name][1].keys())[0]
+
+            print(key_model0)
+            print(key_model1)
+            print(configuration["EnsembledModel"][model_count][model_name][0][key_model0])
+            print(configuration["EnsembledModel"][model_count][model_name][1][key_model1])
 
 
-    #         for scaler in configuration["Scaler"]:
-    #             print(f"Used scaler: {scaler} ")
+            for scaler in configuration["Scaler"]:
+                print(f"Used scaler: {scaler} ")
 
-    #             try: 
-    #                 model_pipe=make_model_pipeline(sk_model = sklearn_models_dict[key_model0], 
-    #                                     sk_model2=sklearn_models_dict[key_model1], 
-    #                                     scaler=scaler_dict[scaler], 
-    #                                     parameter_model=configuration["EnsembledModel"][model_count][model_name][0][key_model0],
-    #                                     parameter_model2=configuration["EnsembledModel"][model_count][model_name][1][key_model1]
-    #                                     )
+                # scaler = "MinMax"
 
-    #                 mlflow.set_experiment(configuration["MLFlow_Experiment"])
+                try: 
+                    model_pipe=make_model_pipeline(sk_model = sklearn_models_dict[key_model0], 
+                                sk_model2=sklearn_models_dict[key_model1], 
+                                scaler=scaler_dict[scaler], 
+                                parameter_model=configuration["EnsembledModel"][model_count][model_name][0][key_model0],
+                                parameter_model2=configuration["EnsembledModel"][model_count][model_name][1][key_model1]
+                                )
 
-    #                 with mlflow.start_run():
+                    mlflow.set_experiment(configuration["MLFlow_Experiment"])
 
-    #                     print("Model run: ", mlflow.active_run().info.run_uuid)
-    #                     print("Training and Evaluation for MLFlow started.")
+                    with mlflow.start_run():
 
-    #                     training(
-    #                         sk_model=model_pipe,
-    #                         x_train=features_train,
-    #                         y_train=target_train,
-    #                         MLFlow=True,
-    #                     )
-    #                     evaluate(
-    #                         sk_model=model_pipe,
-    #                         x_test=features_test,
-    #                         y_test=target_test,
-    #                         MLFLow=True,
-    #                     )
+                        print("Model run: ", mlflow.active_run().info.run_uuid)
+                        print("Training and Evaluation for MLFlow started.")
 
-    #                     print("starting to track artifacts in MLFlow.")
+                        training(
+                            sk_model=model_pipe,
+                            x_train=features_train,
+                            y_train=target_train,
+                            MLFlow=True,
+                        )
+                        evaluate(
+                            sk_model=model_pipe,
+                            x_test=features_test,
+                            y_test=target_test,
+                            MLFLow=True,
+                        )
 
-    #                     mlflow.sklearn.log_model(
-    #                         model_pipe, "model", signature=signature
-    #                     )
+                        print("starting to track artifacts in MLFlow.")
 
-    #                     mlflow.set_tag("model_type", model)
-    #                     mlflow.set_tag("scaler", scaler)
+                        mlflow.sklearn.log_model(
+                            model_pipe, "model", signature=signature
+                        )
 
-    #                     mlflow.set_tag("target", configuration["target"])
-    #                     mlflow.set_tag("features", configuration["features"])
+                        mlflow.set_tag("model_type", model)
+                        mlflow.set_tag("scaler", scaler)
 
-    #                     mlflow.set_tag("model_parameters", model_parameter_dict)
+                        mlflow.set_tag("target", configuration["target"])
+                        mlflow.set_tag("features", configuration["features"])
 
-    #                     mlflow.log_dict(
-    #                         data_minmax_dict, "model/feature_limits.json"
-    #                     )
-    #                     mlflow.log_dict(
-    #                         model_parameter_dict, "model/model_parameters.json"
-    #                     )
-    #                     mlflow.log_dict(
-    #                         feature_dtypes_dict, "model/feature_dtypes.json"
-    #                     )
+                        mlflow.set_tag("model_parameters", model_parameter_dict)
 
-    #                 mlflow.end_run()
+                        mlflow.log_dict(
+                            data_minmax_dict, "model/feature_limits.json"
+                        )
+                        mlflow.log_dict(
+                            model_parameter_dict, "model/model_parameters.json"
+                        )
+                        mlflow.log_dict(
+                            feature_dtypes_dict, "model/feature_dtypes.json"
+                        )
 
-    #             except NameError or ValueError:
-    #                 pass
+                    mlflow.end_run()
+
+                except BaseException:
+                    pass
 
 
 
